@@ -422,20 +422,22 @@ namespace base_local_planner {
     // ROS_INFO_STREAM("   cmd_vel: " << cmd_vel);    
 
 
+    geometry_msgs::PoseStamped global_pose;
+    if (!costmap_ros_->getRobotPose(global_pose)) {
+      return false;
+    }
+
+    std::vector<geometry_msgs::PoseStamped> transformed_plan;
+    //get the global plan in our frame
+    if (!transformGlobalPlan(*tf_, global_plan_, global_pose, *costmap_, global_frame_, transformed_plan)) {
+      ROS_WARN("Could not transform the global plan to the frame of the controller");
+      return false;
+    }
+
+    publishPlan(transformed_plan, g_plan_pub_);
+ 
+
     return true;
-
-  //   std::vector<geometry_msgs::PoseStamped> local_plan;
-  //   geometry_msgs::PoseStamped global_pose;
-  //   if (!costmap_ros_->getRobotPose(global_pose)) {
-  //     return false;
-  //   }
-
-  //   std::vector<geometry_msgs::PoseStamped> transformed_plan;
-  //   //get the global plan in our frame
-  //   if (!transformGlobalPlan(*tf_, global_plan_, global_pose, *costmap_, global_frame_, transformed_plan)) {
-  //     ROS_WARN("Could not transform the global plan to the frame of the controller");
-  //     return false;
-  //   }
 
   //   //now we'll prune the plan based on the position of the robot
   //   if(prune_plan_)
