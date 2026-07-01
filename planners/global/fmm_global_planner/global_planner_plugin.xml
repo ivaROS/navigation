@@ -1,0 +1,9 @@
+<library path="lib/libfmm_global_planner">
+  <class name="fmm_global_planner/FMMGlobalPlanner"
+         type="fmm_global_planner::FMMGlobalPlanner"
+         base_class_type="nav_core::BaseGlobalPlanner">
+    <description>
+      C++ move_base wrapper that calls a Python FMM global planner service.
+    </description>
+  </class>
+</library>
